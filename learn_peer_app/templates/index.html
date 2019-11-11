@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+        <h2>Welcome to homepage</h2>
+        <a href="{{ url_for('users.register_teacher') }}">Register as Teacher</a><br>
+        <a href="{{ url_for('users.register_student') }}">Register as Student</a><br>
+        <a href="{{ url_for('users.login') }}">Login</a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('users.logout') }}">Logout</a>
+        {% endif %}
+    </div>
+{% endblock %}
