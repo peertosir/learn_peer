@@ -1,7 +1,12 @@
-from learn_peer_app import db
-from werkzeug.security import generate_password_hash
-from datetime import datetime, date
+from learn_peer_app import db, login_manager
+from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
+from flask_login import UserMixin
 
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(id)
 
 course_students_maps = db.Table(
     'course_students_maps',
@@ -10,10 +15,10 @@ course_students_maps = db.Table(
 )
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), nullable=False)
-    email = db.Column(db.String(128), nullable=False)
+    username = db.Column(db.String(64), nullable=False, unique=True)
+    email = db.Column(db.String(128), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
     status = db.Column(db.String(20), nullable=False)
     phone = db.Column(db.String(20))
@@ -22,8 +27,6 @@ class User(db.Model):
     courses_mentor = db.relationship('Course', backref='course_mentor', lazy='dynamic')
     courses_part = db.relationship('Course', secondary=course_students_maps,
                                    backref='course_students', lazy='dynamic')
-    tasks_author = db.relationship('Task', backref='task_author', lazy='dynamic')
-    tasks_executor = db.relationship('Task', backref='task_exec', lazy='dynamic')
     lecture_author = db.relationship('Lecture', backref='lecture_author', lazy='dynamic')
 
     def __init__(self, username, email, password, status, phone='', skype=""):
@@ -36,6 +39,9 @@ class User(db.Model):
 
     def __repr__(self):
         return f"User: {self.username}, status: {self.status}"
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
 
 class Course(db.Model):
@@ -64,7 +70,11 @@ class Task(db.Model):
     description = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(20), nullable=False, default='Opened')
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author = db.relationship('User', foreign_keys=[author_id], backref='created_tasks')
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    executor = db.relationship('User', foreign_keys=[executor_id], backref='assigned_tasks')
+    lecture_id = db.Column(db.Integer, db.ForeignKey('lecture.id'))
+    lecture = db.relationship('Lecture', foreign_keys=[lecture_id], backref='linked_task')
     date_to_do = db.Column(db.DateTime)
     answer = db.Column(db.Text)
 
@@ -96,7 +106,3 @@ class Lecture(db.Model):
 
     def __repr__(self):
         return f"Lecture {self.title} for course {self.course.title}"
-
-
-
-
