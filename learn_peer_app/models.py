@@ -85,7 +85,7 @@ class Task(db.Model):
         self.executor_id = executor_id
 
     def __repr__(self):
-        return f"Task from {self.task_author.username} for {self.task_exec.username}"
+        return f"Task from {self.author.username} for {self.executor.username}"
 
 
 
