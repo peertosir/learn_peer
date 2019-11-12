@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Lecture title: {{ lecture.title }}</h1>
+    <p> Lecture content: {{ lecture.content }}</p>
+    <p>Course: {{ lecture.course.title }}</p>
+    <p>Lecture author: {{ lecture.lecture_author.username }}</p>
+    <br>
+    <a href="{{ url_for('lectures.update_lecture', id=lecture.id) }}">Update</a><br>
+    <a href="{{ url_for('lectures.delete_lecture', id=lecture.id) }}">Delete</a><br>
+{% endblock %}
