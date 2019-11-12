@@ -2,11 +2,53 @@
 {% block content %}
     <div>
         <h2>Welcome to homepage</h2>
-        <a href="{{ url_for('users.register_teacher') }}">Register as Teacher</a><br>
-        <a href="{{ url_for('users.register_student') }}">Register as Student</a><br>
-        <a href="{{ url_for('users.login') }}">Login</a>
+
         {% if current_user.is_authenticated %}
-            <a href="{{ url_for('users.logout') }}">Logout</a>
+            Current user: {{ current_user.username }}<br>
+            <a href="{{ url_for('users.logout') }}">Logout</a><br>
+            <a href="{{ url_for('courses.create_course') }}">Create course</a><br>
+            <h2>Courses:</h2>
+            {% if current_user.courses_mentor %}
+                <ul>
+                    {% for course in current_user.courses_mentor %}
+                        <li>
+                            <a href="{{ url_for('courses.get_course', id = course.id) }}">{{ course.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                No courses by you
+            {% endif %}
+            <a href="{{ url_for('tasks.create_task') }}">Create task</a><br>
+            <h2>Tasks:</h2>
+            {% if current_user.created_tasks %}
+                <ul>
+                    {% for task in current_user.created_tasks %}
+                        <li>
+                            <a href="{{ url_for('tasks.get_task', id = task.id) }}">{{ task.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                No tasks by you
+            {% endif %}
+            <a href="{{ url_for('lectures.create_lecture') }}">Create lecture</a><br>
+            <h2>Lectures:</h2>
+            {% if current_user.created_lectures %}
+                <ul>
+                    {% for lecture in current_user.created_lectures %}
+                        <li>
+                            <a href="{{ url_for('lectures.get_lecture', id = lecture.id) }}">{{ lecture.title }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                No Lecture by you
+            {% endif %}
+        {% else %}
+            <a href="{{ url_for('users.register_teacher') }}">Register as Teacher</a><br>
+            <a href="{{ url_for('users.register_student') }}">Register as Student</a><br>
+            <a href="{{ url_for('users.login') }}">Login</a><br>
         {% endif %}
     </div>
 {% endblock %}

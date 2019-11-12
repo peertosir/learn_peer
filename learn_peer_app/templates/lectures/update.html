@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Update a Lecture</h1>
+    <div class="container">
+        <form method="post">
+            {{ form.hidden_tag() }}
+            {{ form.title.label }} {{ form.title }}<br>
+            {{ form.content.label }} {{ form.content }}<br>
+            {{ form.course.label }} {{ form.course }}
+            {% if choices %}
+                {{ form.submit }}
+            {% else %}
+                <p>You have no courses to attach this lecture</p>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}

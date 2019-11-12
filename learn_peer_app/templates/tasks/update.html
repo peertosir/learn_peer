@@ -1,14 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Create a course</h1>
+    <h1>Update a task</h1>
     <div class="container">
         <form method="post">
             {{ form.hidden_tag() }}
             {{ form.title.label }} {{ form.title }}<br>
             {{ form.description.label }} {{ form.description }}<br>
-            {{ form.date_start.label }} {{ form.date_start }}<br>
-            {{ form.date_finish.label }} {{ form.date_finish }}<br>
-            {{ form.max_participants.label }} {{ form.max_participants }}<br>
+            {{ form.executor.label }} {{ form.executor }}
             {{ form.submit }}
         </form>
     </div>

@@ -1,6 +1,6 @@
 from learn_peer_app import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+from datetime import datetime, date
 from flask_login import UserMixin
 
 
@@ -24,10 +24,10 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(20))
     skype = db.Column(db.String(40))
     reg_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
-    courses_mentor = db.relationship('Course', backref='course_mentor', lazy='dynamic')
+    courses_mentor = db.relationship('Course', backref='mentor', lazy='dynamic')
     courses_part = db.relationship('Course', secondary=course_students_maps,
                                    backref='course_students', lazy='dynamic')
-    lecture_author = db.relationship('Lecture', backref='lecture_author', lazy='dynamic')
+    created_lectures = db.relationship('Lecture', backref='lecture_author', lazy='dynamic')
 
     def __init__(self, username, email, password, status, phone='', skype=""):
         self.username = username
@@ -48,17 +48,19 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64), nullable=False)
     description = db.Column(db.String(300), nullable=False)
-    date_start = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
-    date_finish = db.Column(db.DateTime, nullable=False)
+    date_start = db.Column(db.Date, default=date.today(), nullable=False)
+    date_finish = db.Column(db.Date, nullable=False)
     mentor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     max_participants = db.Column(db.Integer, nullable=False)
     lectures = db.relationship('Lecture', backref='course')
 
-    def __init__(self, title, description, mentor_id, max_participants):
+    def __init__(self, title, description, mentor_id, max_participants, date_start, date_finish):
         self.title = title
         self.description = description
         self.max_participants = max_participants
         self.mentor_id = mentor_id
+        self.date_start = date_start
+        self.date_finish = date_finish
 
     def __repr__(self):
         return f"Course {self.title} by {self.course_mentor.username}"
@@ -74,8 +76,7 @@ class Task(db.Model):
     executor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     executor = db.relationship('User', foreign_keys=[executor_id], backref='assigned_tasks')
     lecture_id = db.Column(db.Integer, db.ForeignKey('lecture.id'))
-    lecture = db.relationship('Lecture', foreign_keys=[lecture_id], backref='linked_task')
-    date_to_do = db.Column(db.DateTime)
+    date_to = db.Column(db.DateTime)
     answer = db.Column(db.Text)
 
     def __init__(self, title, description, author_id, executor_id):
@@ -95,8 +96,8 @@ class Lecture(db.Model):
     content = db.Column(db.Text, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
-    tasks = db.relationship('Task', backref='to_lecture')
-    date_to_happen = db.Column(db.DateTime)
+    tasks = db.relationship('Task', backref='lecture')
+    date_held = db.Column(db.DateTime)
 
     def __init__(self, title, content, author_id, course_id):
         self.title = title
