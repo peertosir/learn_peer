@@ -57,4 +57,16 @@ def delete_course(id):
 @login_required
 def get_course(id):
     course = Course.query.get_or_404(id)
-    return render_template('courses/course.html', course=course)
+    count_participants = len(course.course_students)
+    lectures = course.lectures
+    return render_template('courses/course.html', course=course, amount=count_participants, lectures=lectures)
+
+@courses.route('/your_courses')
+@login_required
+def get_list():
+    if current_user.status == "Teacher":
+        courses = current_user.courses_mentor
+    else:
+        courses = current_user.courses_part
+    return render_template("courses/get_list.html", courses=courses)
+

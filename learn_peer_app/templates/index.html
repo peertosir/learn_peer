@@ -1,8 +1,7 @@
-{% extends "base.html" %}
+{% extends "l_navbar.html" %}
 {% block content %}
     <div>
         <h2>Welcome to homepage</h2>
-
         {% if current_user.is_authenticated %}
             Current user: {{ current_user.username }}<br>
             <a href="{{ url_for('users.logout') }}">Logout</a><br>

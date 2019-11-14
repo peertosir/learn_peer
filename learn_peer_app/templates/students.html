@@ -1,0 +1,10 @@
+{% extends "l_navbar.html" %}
+{% block content %}
+    <div class="container">
+    {% for student in students %}
+        <div class="jumbotron">
+            {{ student.username }} - {{ student.email }}
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

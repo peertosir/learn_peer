@@ -1,11 +1,25 @@
-{% extends "base.html" %}
+{% extends "l_navbar.html" %}
 {% block content %}
-    <h1>{{ course.title }}</h1>
+    <h1>{{ course.title }}
+        {% if course.mentor_id == current_user.id %}
+            <a class="btn btn-primary" href="{{ url_for('courses.update_course', id=course.id) }}">Update</a>
+            <a class="btn btn-danger" href="{{ url_for('courses.delete_course', id=course.id) }}">Delete</a>
+        {% endif %}
+    </h1>
+    <hr>
     <p>{{ course.description }}</p>
-    <p>Dates: {{ course.date_start }} - {{ course.date_finish }}</p>
+    <p>Dates:<br> {{ course.date_start.strftime("%d-%m-%y") }} - {{ course.date_finish.strftime("%d-%m-%y") }}</p>
     <p>Max participants: {{ course.max_participants }}</p>
+    <p>Participants now: {{ amount }}</p>
     <p>Course mentor: {{ course.mentor.username }}</p>
-    <br>
-    <a href="{{ url_for('courses.update_course', id=course.id) }}">Update</a><br>
-    <a href="{{ url_for('courses.delete_course', id=course.id) }}">Delete</a><br>
+    <hr>
+    <h2>Lectures</h2>
+    {% if course.mentor_id == current_user.id %}
+        <a class="btn btn-success btn-sm" href="{{ url_for('lectures.create_lecture', id=course.id) }}">Create lecture</a>
+    {% endif %}
+    {% for lecture in lectures %}
+        <div class="container" style="border: burlywood 1px solid">
+            <a href="{{ url_for('lectures.get_lecture', id=lecture.id) }}">{{ lecture.title }}</a>
+        </div>
+    {% endfor %}
 {% endblock %}

@@ -4,10 +4,16 @@
     <div class="container">
         <form method="post">
             {{ form.hidden_tag() }}
-            {{ form.title.label }} {{ form.title }}<br>
-            {{ form.description.label }} {{ form.description }}<br>
-            {{ form.executor.label }} {{ form.executor }}
-            {{ form.submit }}
+            <div class="form-group col-4">
+                {{ form.title.label }} {{ form.title(class="form-control") }}
+            </div>
+            <div class="form-group col-4">
+                {{ form.description.label }} {{ form.description(class="form-control") }}
+            </div>
+            <div class="form-group col-4">
+                {{ form.executor.label }} {{ form.executor(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-success") }}
         </form>
     </div>
 {% endblock %}

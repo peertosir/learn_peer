@@ -1,9 +1,11 @@
-{% extends "base.html" %}
+{% extends "l_navbar.html" %}
 {% block content %}
-    <h1>{{ task.title }}</h1>
-    <p>{{ task.description }}</p>
-    <p>{{ task.executor.username }}</p>
-    <br>
-    <a href="{{ url_for('tasks.update_task', id=task.id) }}">Update</a><br>
-    <a href="{{ url_for('tasks.delete_task', id=task.id) }}">Delete</a><br>
+    <h1>Task: {{ task.title }}
+        {% if task.author_id == current_user.id %}
+            <a class="btn btn-primary" href="{{ url_for('tasks.update_task', id=task.id) }}">Update</a>
+            <a class="btn btn-danger" href="{{ url_for('tasks.delete_task', id=task.id) }}">Delete</a>
+        {% endif %}
+    </h1>
+    <hr>
+    <p>Task description: {{ task.description }}</p>
 {% endblock %}

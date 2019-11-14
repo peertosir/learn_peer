@@ -1,13 +1,24 @@
-{% extends "base.html" %}
+{% extends "wl_navbar.html" %}
 {% block content %}
     <div class="container">
         <form method="post">
             {{ form.hidden_tag() }}
-            {{ form.username.label }} - {{ form.username }}<br>
-            {{ form.email.label }} - {{ form.email }}<br>
-            {{ form.password.label }} - {{ form.password }}<br>
-            {{ form.pass_confirm.label }} - {{ form.pass_confirm }}<br>
-            {{ form.submit }}
+            <div class="form-group col-4">
+            {{ form.username.label }} {{ form.username(class='form-control') }}
+            </div>
+            <div class="form-group col-4">
+            {{ form.email.label }} {{ form.email(class='form-control') }}
+            </div>
+            <div class="form-group col-4">
+            {{ form.password.label }} {{ form.password(class='form-control') }}
+            </div>
+            <div class="form-group col-4">
+            {{ form.pass_confirm.label }} {{ form.pass_confirm(class='form-control') }}
+            </div>
+            <div>
+                {{ form.submit(class='btn btn-success') }}
+            </div>
+
         </form>
     </div>
 {% endblock %}

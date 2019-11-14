@@ -1,10 +1,23 @@
-{% extends "base.html" %}
+{% extends "l_navbar.html" %}
 {% block content %}
-    <h1>Lecture title: {{ lecture.title }}</h1>
-    <p> Lecture content: {{ lecture.content }}</p>
-    <p>Course: {{ lecture.course.title }}</p>
+    <h1>Lecture: {{ lecture.title }}
+        {% if lecture.author_id == current_user.id %}
+            <a class="btn btn-primary" href="{{ url_for('lectures.update_lecture', id=lecture.id) }}">Update</a>
+            <a class="btn btn-danger" href="{{ url_for('lectures.delete_lecture', id=lecture.id) }}">Delete</a>
+        {% endif %}
+    </h1>
+
+    <hr>
+    <p>Info: {{ lecture.content }}</p>
     <p>Lecture author: {{ lecture.lecture_author.username }}</p>
-    <br>
-    <a href="{{ url_for('lectures.update_lecture', id=lecture.id) }}">Update</a><br>
-    <a href="{{ url_for('lectures.delete_lecture', id=lecture.id) }}">Delete</a><br>
+    <hr>
+    <h2>Tasks</h2>
+    {% if lecture.author_id == current_user.id %}
+        <a class="btn btn-success btn-sm" href="{{ url_for('tasks.create_task') }}">Create task</a>
+    {% endif %}
+    {% for task in tasks %}
+        <div class="container" style="border: burlywood 1px solid">
+            <a href="{{ url_for('tasks.get_task', id=task.id) }}">{{ task.title }}</a>
+        </div>
+    {% endfor %}
 {% endblock %}

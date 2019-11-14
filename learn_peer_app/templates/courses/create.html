@@ -1,15 +1,25 @@
-{% extends "base.html" %}
+{% extends "l_navbar.html" %}
 {% block content %}
     <h1>Create a course</h1>
     <div class="container">
         <form method="post">
             {{ form.hidden_tag() }}
-            {{ form.title.label }} {{ form.title }}<br>
-            {{ form.description.label }} {{ form.description }}<br>
-            {{ form.date_start.label }} {{ form.date_start }}<br>
-            {{ form.date_finish.label }} {{ form.date_finish }}<br>
-            {{ form.max_participants.label }} {{ form.max_participants }}<br>
-            {{ form.submit }}
+            <div class="form-group col-4">
+                {{ form.title.label }} {{ form.title(class="form-control") }}
+            </div>
+            <div class="form-group col-4">
+                {{ form.description.label }} {{ form.description(class="form-control") }}
+            </div>
+            <div class="form-group col-4">
+                {{ form.date_start.label }} {{ form.date_start(class="form-control") }}
+            </div>
+            <div class="form-group col-4">
+                {{ form.date_finish.label }} {{ form.date_finish(class="form-control") }}
+            </div>
+            <div class="form-group col-4">
+                {{ form.max_participants.label }} {{ form.max_participants(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-success") }}
         </form>
     </div>
 {% endblock %}
