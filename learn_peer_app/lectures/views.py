@@ -58,4 +58,5 @@ def delete_lecture(id):
 @login_required
 def get_lecture(id):
     lecture = Lecture.query.get_or_404(id)
-    return render_template('lectures/lecture.html', lecture=lecture)
+    tasks = lecture.tasks
+    return render_template('lectures/lecture.html', lecture=lecture, tasks=tasks)

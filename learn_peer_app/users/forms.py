@@ -6,7 +6,7 @@ from learn_peer_app.models import User
 
 
 class RegisterForm(FlaskForm):
-    username = StringField("Enter your username", validators=[DataRequired()])
+    username = StringField("Enter your username: ", validators=[DataRequired()])
     email = StringField("Enter your email: ", validators=[DataRequired(), Email()])
     password = PasswordField("Enter your password: ", validators=[DataRequired(), EqualTo('pass_confirm')])
     pass_confirm = PasswordField("Enter your password one more time: ", validators=[DataRequired()])
@@ -17,7 +17,7 @@ class RegisterForm(FlaskForm):
             raise ValidationError("User with this email already exists")
 
     def check_username(self, field):
-        if User.query.filter(User.username == field.ata):
+        if User.query.filter(User.username == field.data):
             raise ValidationError("User with this email already exists")
 
 

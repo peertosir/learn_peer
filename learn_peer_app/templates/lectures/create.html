@@ -4,14 +4,18 @@
     <div class="container">
         <form method="post">
             {{ form.hidden_tag() }}
-            {{ form.title.label }} {{ form.title }}<br>
-            {{ form.content.label }} {{ form.content }}<br>
-            {{ form.course.label }} {{ form.course }}
-            {% if choices %}
-                {{ form.submit }}
-            {% else %}
-                <p>You have no courses to attach this lecture</p>
-            {% endif %}
+        <div class="form-group col-4">
+            {{ form.title.label }} {{ form.title(class="form-control") }}
+        </div>
+        <div class="form-group col-4">
+            {{ form.content.label }} {{ form.content(class="form-control") }}
+        </div>
+        <div class="form-group col-4">
+            {{ form.course.label }} {{ form.course(class="form-control") }}
+        </div>
+        <div class="form-group col-4">
+                {{ form.submit(class="btn btn-success") }}
+        </div>
         </form>
     </div>
 {% endblock %}

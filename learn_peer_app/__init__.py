@@ -16,7 +16,7 @@ Migrate(app, db)
 ##login manager init
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'users.login'
+login_manager.login_view = 'core.join_us'
 ###
 from learn_peer_app.models import User, Lecture, Task, Course
 from learn_peer_app.users.views import users
