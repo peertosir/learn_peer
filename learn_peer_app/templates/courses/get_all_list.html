@@ -1,0 +1,28 @@
+{% extends "l_navbar.html" %}
+{% block content %}
+    {% if current_user.status == "Teacher" %}
+        <a class="btn btn-success" href="{{ url_for('courses.create_course') }}">Create course</a>
+        <hr>
+    {% endif %}
+    <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('courses.get_my_list') }}">My courses</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#">All courses</a>
+          </li>
+    </ul>
+    {% if courses %}
+        {% for course in courses %}
+            <div class="jumbotron jumbotron-fluid">
+              <div class="container">
+                <h1 class="display-4"><a href="{{ url_for('courses.get_course', id=course.id) }}"> {{ course.title }} </a></h1>
+                <p class="lead">{{ course.description }}</p>
+              </div>
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        No courses yet
+    {% endif %}
+{% endblock %}
