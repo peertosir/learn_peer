@@ -6,20 +6,20 @@ from learn_peer_app import db
 
 tasks = Blueprint('tasks', __name__, url_prefix='/tasks')
 
-@tasks.route('/create', methods=['POST', 'GET'])
+@tasks.route('/create/<int:lecture_id>', methods=['POST', 'GET'])
 @login_required
-def create_task():
+def create_task(lecture_id):
     form = TaskForm()
-    form_executors_list = [(i.id, i.username) for i in User.query.all()]
+    course_partic = Course.query.get(Lecture.query.get(lecture_id).course_id).course_students
+    form_executors_list = [(i.id, i.username) for i in course_partic]
     form.executor.choices = form_executors_list
-    print(form.validate())
     if form.validate_on_submit():
         task = Task(title=form.title.data, description=form.description.data,
                     author_id=current_user.id, executor_id=form.executor.data)
+        task.lecture_id = lecture_id
         db.session.add(task)
         db.session.commit()
-        return redirect(url_for('core.index'))
-    print("Kek")
+        return redirect(url_for('lectures.get_lecture', id=lecture_id))
     return render_template('tasks/create.html', form=form)
 
 
@@ -28,8 +28,8 @@ def create_task():
 def update_task(id):
     task = Task.query.get_or_404(id)
     form = TaskForm()
-    form.executor.choices = [(i.id, i.username) for i in User.query.all()]
-    print(form.validate())
+    course_partic = Course.query.get(Lecture.query.get(lecture_id).course_id).course_students
+    form_executors_list = [(i.id, i.username) for i in course_partic]
     if form.validate_on_submit():
         task.title = form.title.data
         task.description = form.description.data

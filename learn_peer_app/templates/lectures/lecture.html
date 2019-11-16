@@ -13,7 +13,7 @@
     <hr>
     <h2>Tasks</h2>
     {% if lecture.author_id == current_user.id %}
-        <a class="btn btn-success btn-sm" href="{{ url_for('tasks.create_task') }}">Create task</a>
+        <a class="btn btn-success btn-sm" href="{{ url_for('tasks.create_task', lecture_id=lecture.id) }}">Create task</a>
     {% endif %}
     {% for task in tasks %}
         <div class="container" style="border: burlywood 1px solid">

@@ -16,7 +16,7 @@ def create_course():
                         date_finish=form.date_finish.data, mentor_id=current_user.id)
         db.session.add(course)
         db.session.commit()
-        return redirect(url_for('core.index'))
+        return redirect(url_for('course.index'))
     return render_template('courses/create.html', form=form)
 
 
