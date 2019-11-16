@@ -80,7 +80,7 @@ def get_all_list():
         ).all()
         excluded = [i.id for i in subq]
         courses = Course.query.filter(Course.id.notin_(excluded))
-        return render_template("courses/get_all_list.html", courses=courses)
+    return render_template("courses/get_all_list.html", courses=courses)
 
 
 @courses.route('/your_courses')
