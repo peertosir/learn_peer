@@ -1,6 +1,6 @@
 from flask import render_template, redirect, Blueprint, url_for, request, abort
 from learn_peer_app.courses.forms import CourseForm
-from learn_peer_app.models import User, Course, Lecture, Task
+from learn_peer_app.models import User, Course, Lecture, Task, course_students_maps
 from flask_login import login_required, current_user
 from learn_peer_app import db
 
@@ -66,11 +66,35 @@ def get_course(id):
     return render_template('courses/course.html', course=course, amount=count_participants, lectures=lectures,
                            can_sign_up=can_sign_up)
 
+
+@courses.route('/all_courses')
+@login_required
+def get_all_list():
+    if current_user.status == "Teacher":
+        courses = Course.query.filter(Course.mentor_id != current_user.id).all()
+    else:
+        subq = Course.query.join(
+            Course.course_students
+        ).filter(
+            current_user.id == User.id
+        ).all()
+        excluded = [i.id for i in subq]
+        courses = Course.query.filter(Course.id.notin_(excluded))
+        return render_template("courses/get_all_list.html", courses=courses)
+
+
 @courses.route('/your_courses')
 @login_required
-def get_list():
-    courses = Course.query.all()
-    return render_template("courses/get_list.html", courses=courses)
+def get_my_list():
+    if current_user.status == "Teacher":
+        courses = Course.query.filter(Course.mentor_id == current_user.id).all()
+    else:
+        courses = Course.query.join(
+            Course.course_students
+        ).filter(
+            current_user.id == User.id
+        ).all()
+    return render_template("courses/get_my_list.html", courses=courses)
 
 
 @courses.route('/join_course/<int:id>')
