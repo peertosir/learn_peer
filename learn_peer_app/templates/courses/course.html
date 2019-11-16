@@ -7,6 +7,11 @@
         {% endif %}
     </h1>
     <hr>
+    {% if can_sign_up %}
+        <div class="container">
+            <a class="btn btn-success" href="{{ url_for('courses.join_course', id = course.id) }}">Sign up for course</a>
+        </div>
+    {% endif %}
     <p>{{ course.description }}</p>
     <p>Dates:<br> {{ course.date_start.strftime("%d-%m-%y") }} - {{ course.date_finish.strftime("%d-%m-%y") }}</p>
     <p>Max participants: {{ course.max_participants }}</p>

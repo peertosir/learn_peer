@@ -57,16 +57,27 @@ def delete_course(id):
 @login_required
 def get_course(id):
     course = Course.query.get_or_404(id)
+    if current_user.status == "Student":
+        can_sign_up = True if course not in current_user.courses_part else False
+    else:
+        can_sign_up = False
     count_participants = len(course.course_students)
     lectures = course.lectures
-    return render_template('courses/course.html', course=course, amount=count_participants, lectures=lectures)
+    return render_template('courses/course.html', course=course, amount=count_participants, lectures=lectures,
+                           can_sign_up=can_sign_up)
 
 @courses.route('/your_courses')
 @login_required
 def get_list():
-    if current_user.status == "Teacher":
-        courses = current_user.courses_mentor
-    else:
-        courses = current_user.courses_part
+    courses = Course.query.all()
     return render_template("courses/get_list.html", courses=courses)
+
+
+@courses.route('/join_course/<int:id>')
+@login_required
+def join_course(id):
+    course = Course.query.get(id)
+    course.course_students.append(current_user)
+    db.session.commit()
+    return redirect(url_for('courses.get_course', id=course.id))
 
