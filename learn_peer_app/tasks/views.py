@@ -1,5 +1,5 @@
 from flask import render_template, redirect, Blueprint, url_for, request, abort
-from learn_peer_app.tasks.forms import TaskForm
+from learn_peer_app.tasks.forms import TaskForm, ResolveTaskForm
 from learn_peer_app.models import User, Course, Lecture, Task
 from flask_login import login_required, current_user
 from learn_peer_app import db
@@ -59,3 +59,23 @@ def delete_task(id):
 def get_task(id):
     task = Task.query.get_or_404(id)
     return render_template('tasks/task.html', task=task)
+
+
+@tasks.route('/assigned_tasks')
+@login_required
+def assigned_tasks():
+    tasks = Task.query.filter(Task.executor_id == current_user.id)
+    return render_template('tasks/todo_tasks.html', tasks=tasks)
+
+
+@tasks.route('/get_assigned_task/<int:id>', methods=['POST', 'GET'])
+@login_required
+def get_assigned_task(id):
+    task = Task.query.get(id)
+    form = ResolveTaskForm()
+    if form.validate_on_submit():
+        task.answer = form.answer.data
+        task.status = "Resolved"
+        db.session.commit()
+        return redirect(url_for('tasks.assigned_tasks'))
+    return render_template('tasks/resolve_task.html', form=form, task=task)

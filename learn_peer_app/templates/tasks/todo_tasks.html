@@ -1,0 +1,20 @@
+{% extends 'l_navbar.html' %}
+{% block content %}
+    {% if tasks %}
+    {% for task in tasks %}
+        {% if task.status == "Opened" %}
+        <p>
+        <a href="{{ url_for('tasks.get_assigned_task', id=task.id) }}">{{ task.title }}</a> - {{ task.status }}
+        </p>
+        <hr>
+        {% else %}
+        <p>
+        <a href="{{ url_for('tasks.get_task', id=task.id) }}">{{ task.title }}</a> - {{ task.status }}
+        </p>
+        <hr>
+        {% endif %}
+    {% endfor %}
+    {% else %}
+        <h1>No tasks for you today</h1>
+    {% endif %}
+{% endblock %}

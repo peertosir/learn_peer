@@ -8,3 +8,8 @@ class TaskForm(FlaskForm):
     executor = SelectField("Choose assignee for task: ", coerce=int)
     submit = SubmitField("Go")
 
+
+class ResolveTaskForm(FlaskForm):
+    answer = TextAreaField("Put your answer here")
+    submit = SubmitField("Send to teacher")
+
