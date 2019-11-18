@@ -1,0 +1,18 @@
+{% extends "l_navbar.html" %}
+{% block content %}
+    <div class="container">
+        <h1>{{ task.title }}</h1>
+        <p>
+            {{ task.description }}
+        </p>
+        <div class="container">
+            <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-group col-4">
+                {{ form.answer.label }} {{ form.answer(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-success") }}
+        </form>
+        </div>
+    </div>
+{% endblock %}
