@@ -12,12 +12,13 @@ def create_task(lecture_id):
     form = TaskForm()
     course_partic = Course.query.get(Lecture.query.get(lecture_id).course_id).course_students
     form_executors_list = [(i.id, i.username) for i in course_partic]
-    form.executor.choices = form_executors_list
+    form.executors.choices = form_executors_list
     if form.validate_on_submit():
-        task = Task(title=form.title.data, description=form.description.data,
-                    author_id=current_user.id, executor_id=form.executor.data)
-        task.lecture_id = lecture_id
-        db.session.add(task)
+        for executor in form.executors.data:
+            task = Task(title=form.title.data, description=form.description.data,
+                        author_id=current_user.id, executor_id=executor)
+            task.lecture_id = lecture_id
+            db.session.add(task)
         db.session.commit()
         return redirect(url_for('lectures.get_lecture', id=lecture_id))
     return render_template('tasks/create.html', form=form)
